@@ -133,23 +133,3 @@ jobs:
         with:
           name: security-report
           path: security-report.json
-
-  deploy:
-    name: 🚀 Deployment Package
-    needs: [build, test, coverage, lint, security]
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Prepare Deployment Package
-        run: |
-          mkdir deployment
-          cp -r . deployment/
-          zip -r deployment-package.zip deployment/
-
-      - name: Upload Deployment Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: deployment-package
-          path: deployment-package.zip
