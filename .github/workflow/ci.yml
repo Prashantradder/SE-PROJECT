@@ -135,21 +135,32 @@ jobs:
           path: security-report.json
 
   deploy:
-    name: 🚀 Deployment Package
-    needs: [build, test, coverage, lint, security]
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+  name: 🚀 Deployment Package
+  needs: [build, test, coverage, lint, security]
+  if: github.ref == 'refs/heads/main'
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v4
 
-      - name: Prepare Deployment Package
-        run: |
-          mkdir deployment
-          cp -r . deployment/
-          zip -r deployment-package.zip deployment/
+    - name: Prepare Deployment Package
+      run: |
+        mkdir deployment
+        cp -r auth.py deployment/
+        cp -r app.py deployment/
+        cp -r blackout.py deployment/
+        cp -r cab_approval.py deployment/
+        cp -r change_requests.py deployment/
+        cp -r database.py deployment/
+        cp -r sla_engine.py deployment/
+        cp -r utils.py deployment/
+        cp -r data deployment/
+        cp requirements.txt deployment/
+        cp README.md deployment/ 
+        cd deployment
+        zip -r ../deployment-package.zip .
 
-      - name: Upload Deployment Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: deployment-package
-          path: deployment-package.zip
+    - name: Upload Deployment Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: deployment-package
+        path: deployment-package.zip
